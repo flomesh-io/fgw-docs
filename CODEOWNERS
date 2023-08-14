@@ -1,0 +1,4 @@
+# ref: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+# CODEOWNERS include members of the fgw-approvers team - https://github.com/orgs/flomesh-io/teams/fgw-approvers/members
+# CODEOWNERS include members of the fgw-www team - https://github.com/orgs/flomesh-io/teams/fgw-www/members
+* @flomesh-io/fgw-approvers @flomesh-io/fgw-docs-approvers @flomesh-io/fgw-www
