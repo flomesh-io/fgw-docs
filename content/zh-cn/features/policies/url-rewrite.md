@@ -1,6 +1,6 @@
 ---
 title: "URL 重写"
-description: ""
+description: "URL 重写功能为系统提供了更大的灵活性来适应后端服务的不断变化。本文档将介绍如何使用 FGW 的 URL 重写功能。"
 weight: 10
 ---
 

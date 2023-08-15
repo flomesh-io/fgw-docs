@@ -17,7 +17,7 @@ weight: 9
 - 两个后端服务
 - 了解 [HTTP 负载均衡的配置](/features/http-load-balancer/)
 
-> 用于健康检查的两个服务，可以使用 Pipy 快速模拟。
+> 用于重定向的两个服务，可以使用 Pipy 快速模拟。
 
 ```shell
 #origin
@@ -25,6 +25,8 @@ pipy -e "pipy().listen(8081).serveHTTP(new Message({status: 200},'Hello, world')
 #target
 pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 200},'Hello, there'))"
 ```
+
+两个后端服务返回不同的结果。
 
 ```shell
 curl http://localhost:8081

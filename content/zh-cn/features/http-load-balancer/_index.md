@@ -18,7 +18,16 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 
 ## HTTP 配置
 
-1. 要使用 L7 负载均衡，首先我们需要将监听端口的协议设置为 `HTTP`，参考文档[监听端口配置](/reference/configuration/#2-监听端口配置listeners)。
+### 配置监听端口
+
+要使用 L7 负载均衡，首先我们需要将监听端口的协议设置为 `HTTP`，参考文档 [监听端口配置](/reference/configuration/#2-监听端口配置listeners)。
+
+- `Port`：应用使用的端口号。这是设置服务将接收请求的端口。有效范围是 1~65535，并且是必须配置的。
+- `Listen`：监听端口号。这不是必须的配置项。如果未配置，FGW 将使用 `Port` 字段值作为监听端口号。有效范围同样是 1~65535。
+- `Protocol`：端口所使用的协议。这定义了服务将如何处理入站请求。可选值包括 `HTTP`、`HTTPS`、`TLS`、和 `TCP`，这是一个必须配置的字段。
+- `AccessControlLists`：访问控制列表。此字段用于设置访问者 IP 地址的黑白名单。若设置了白名单，则只允许白名单中的 IP 访问；若未设置白名单，但设置了黑名单，则除黑名单外的所有 IP 都可访问。具体的设置方法和格式可以参考 [访问控制规则文档](/reference/configuration/#21-accesscontrollists)。
+- `bpsLimit`：网络限速。该字段用于限制服务的网络带宽使用，单位为字节/秒。例如，如果设置了 `"bpsLimit": 10000000`，那么网络的最大吞吐量将被限制为 10MB/s。
+- `TLS`：配置 TLS 相关的证书信息。此字段用于设置和管理端到端的加密连接，确保数据在传输过程中的安全性。具体的设置方法和格式可以参考 [TLS 配置文档](/reference/configuration/#22-tls)。
 
 ```json
 {
@@ -31,8 +40,20 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 }
 ```
 
-2. 接下来是设置端口 `8080` 的路由规则，参考文档 [HTTP 协议端口号路由规则配置](/reference/configuration/#31-端口号配置protocol-为-httphttps-的配置格式)。
+### 配置端口的路由规则
 
+接下来是设置端口 `8080` 的路由规则，参考文档 [HTTP 协议端口号路由规则配置](/reference/configuration/#31-端口号配置protocol-为-httphttps-的配置格式)。端口的路由规则是一个键值对，键为域名，值为路由规则。这里我们使用 `*` 来匹配所有的域名，也就是说忽略域名。路由规则的字段：
+
+- `RouteType`：路由规则，可选 `HTTP` 或者 `GRPC`。
+- `Matches`：匹配规则，可根据请求路径、头部、参数或者方法等信息将请求匹配到响应的后端。
+  - `Path`：HTTP uri path 匹配。当请求的 URI 路径与此字段匹配时，将根据其他匹配条件确定是否路由到指定的后端服务或静态页面目录。这不是一个必须字段，但常用于基于 URL 的路由策略。具体匹配规则请参考 [Path 规则配置](/reference/configuration/#31111-path)。
+  - `Headers`：HTTP header 匹配。您可以基于请求头中的特定字段进行路由。例如，可以根据 `User-Agent` 头信息来路由移动设备的请求到特定的后端服务。具体匹配规则请参考 [头部规则配置](/reference/configuration/#31112-headers)。
+  - `Methods`：允许的 HTTP 方法。这允许你基于请求的 HTTP 方法（例如 `GET`、`POST`、`DELETE` 或 `PUT`）来进行路由选择。当请求方法与此字段中的任何方法匹配时，将考虑其他匹配条件。
+  - `QueryParams`：HTTP 请求参数匹配。可以根据 URL 查询参数中的特定键值对进行路由，这提供了更细粒度的匹配能力。具体匹配规则请参考 [请求参数规则配置](/reference/configuration/#31113-queryparams)。
+  - `BackendService`：后端服务。这定义了将请求路由到哪个后端服务。值为一个键值对，其中键是服务名，值是权重。与 `ServerRoot` 相比，`BackendService` 或 `ServerRoot` 必须至少有一个存在。
+  - `ServerRoot`：静态页面所对应的目录。如果请求匹配并且需要路由到静态内容，则使用此字段指定的目录作为静态内容的根目录。与 `BackendService` 相比，`BackendService` 或 `ServerRoot` 必须至少有一个存在。
+  - `Method`：当 `RouteType` 为 `GRPC` 时，用于匹配**服务**的字段。这允许根据特定的 gRPC 方法进行路由选择。具体匹配规则请参考 [GRPC 服务规则配置](/reference/configuration/#31114-method)。
+  - `RateLimit`：路由限流配置。可以对匹配的路由进行限流，以防止某些请求因频繁访问而影响系统性能。具体限流规则请参考 [限流使用文档](/features/policies/rate-limiting/)。
 
 ```json
 {
@@ -57,7 +78,18 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 }
 ```
 
-3. 配置服务端点，参考文档[服务配置](/reference/configuration/#4服务配置services)。
+### 配置服务端点
+
+参考文档 [服务配置](/reference/configuration/#4服务配置services)。
+
+- `StickyCookieName`：使用 cookie sticky 负载均衡时的 cookie 名称。该字段用于在 sticky 负载均衡策略中标识客户端，以确保客户端请求始终被路由到同一上游服务。使用方法可参考文档 [会话保持](/features/policies/session-sticky/)。
+- `StickyCookieExpires`：使用 cookie sticky 时的 cookie 有效期。该字段定义了 cookie 的生命周期，以秒为单位。例如，如果设置为 3600，那么 cookie 的有效期为 1 小时。
+- `HealthCheck`：对上游服务的健康检查配置。健康检查用于定期检查上游服务的健康状态，确保请求只被路由到健康的服务实例。具体的使用方法，可参考文档 [健康检查](/features/policies/healthcheck/)。
+- `Endpoints`：上游服务信息。这是必须配置的字段，它定义了 FGW 将请求路由到哪些上游服务。具体的配置方法和格式可以参考 [端点配置文档](/reference/configuration/#412-endpoints)。
+- `Filters`：过滤器配置。过滤器用于在请求被路由到上游服务之前或之后执行特定的操作，如修改请求或响应、记录日志等。具体的配置方法和格式可以参考 [过滤器配置文档](/reference/configuration/#413-filters)。
+- `CircuitBreaking`：熔断配置。熔断器用于在上游服务出现问题时防止请求流向该服务，以此来保护服务和提高系统的可用性。此配置仅适用于 `HTTP` 和 `HTTPS` 协议的场景。具体的使用方法可参考文档 [熔断](/features/policies/circuit-breaking/)。
+- `RetryPolicy`：重试配置。此字段定义了当请求失败时的重试策略，如重试次数、重试间隔等。此配置同样只适用于 `HTTP` 和 `HTTPS` 协议的场景。具体的使用方法可参考文档 [重试](/features/policies/retry/)。
+- `UpstreamCert`：访问上游时默认使用的 TLS 证书。当 FGW 与上游服务之间的通信需要加密时，此字段用于提供 TLS 证书的配置。具体的使用方法，可以参考文档 [TLS 上游](/features/tls/tls-upstream/)。
 
 ```json
 {
@@ -76,7 +108,9 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 }
 ```
 
-4. 不要忘记插件链的配置，本文档主要介绍 HTTP 流量的负载均衡，这里只需要引入 `HTTPRoute` 插件链和其中的部分插件即可。完整的插件配置可以参考文档[完整的插件配置](/reference/plugin/#完整配置)，这里我们使用的是 HTTP 负载均衡的最小插件集合。
+### 配置插件链
+
+不要忘记插件链的配置，本文档主要介绍 HTTP 流量的负载均衡，这里只需要引入 `HTTPRoute` 插件链和其中的部分插件即可。完整的插件配置可以参考文档 [完整的插件配置](/reference/plugin/#完整配置)，这里我们使用的是 HTTP 负载均衡的最小插件集合。
 
 ```json
 {
@@ -93,7 +127,9 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 }
 ```
 
-5. 最后完整的配置如下，使用其替换 FGW 工程中的 `pjs/config.json`。
+### 完整配置
+
+最后完整的配置如下，使用其替换 FGW 工程中的 `pjs/config.json`。
 
 ```json
 {
@@ -178,7 +214,7 @@ server.csr
 
 > 可以使用命令 `awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' ca-cert.pem` 来输出单行。
 
-2. 接下来在前面 [HTTP 配置](#http-配置)的基础上，先添加一个新的端口 `8443`，协议类型为 `HTTPS`。
+2. 接下来在前面 [HTTP 配置](#http-配置) 的基础上，先添加一个新的端口 `8443`，协议类型为 `HTTPS`。
 
 ```json
 {
@@ -237,7 +273,7 @@ server.csr
 }
 ```
 
-6. HTTPS 场景下，多了 TLS 卸载的逻辑。需要为 HTTPS 增加一个新的 [HTTPSChain](/reference/plugin/#https-路由)，跟[前面 `HTTPChain`](/features/http-load-balancer/#http-配置) 的唯一区别就是引入了 `common/tls-termination.js` 插件。
+6. HTTPS 场景下，多了 TLS 卸载的逻辑。需要为 HTTPS 增加一个新的 [HTTPSChain](/reference/plugin/#https-路由)，跟 [前面 `HTTPChain`](/features/http-load-balancer/#http-配置) 的唯一区别就是引入了 `common/tls-termination.js` 插件。
 
 ```json
 {

@@ -19,7 +19,7 @@ Flomesh Gateway (FGW) 提供了一系列先进的负载均衡策略，以确保�
 - [路径重写](/features/policies/url-rewrite/)
 - [URL 重写](/features/policies/rate-limiting/)
 - [会话保持](/features/policies/session-sticky/)
-- [流量镜像](/features/policies/request-mirror)
+<!-- - [流量镜像](/features/policies/request-mirror) -->
 
 当然还有粒度更加灵活的策略，如 [限流]()，可以作用于域名和路由的粒度。
 
