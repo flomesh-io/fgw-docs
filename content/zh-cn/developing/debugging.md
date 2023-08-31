@@ -1,6 +1,6 @@
 ---
-title: "开发贡献"
+title: "Debugging"
 description: ""
-weight: 5
+weight: 2
 draft: true
 ---

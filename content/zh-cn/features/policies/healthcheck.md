@@ -24,7 +24,7 @@ pipy -e "pipy().listen(8081).serveHTTP(new Message({status: 200},'Hello, world')
 pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 500},''))"
 ```
 
-## 配置
+## 配置说明
 
 参考 [健康检查配置文档](/reference/configuration/#411-healthcheck)。
 
@@ -34,7 +34,7 @@ pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 500},''))"
 - `Uri`：健康检查 URI，用于 HTTP 健康检查的路径。当使用 HTTP 方法进行健康检查时，系统会向此 URI 发送请求以确定服务的健康状态。如果此字段未设置，则健康检查将使用 TCP 方法检查端口的健康状况，而不是使用 HTTP 方法。可选字段。
 - `Matches`：匹配条件，用于确定 HTTP 健康检查的成功或失败。此字段可以包含多个条件，例如期望的 HTTP 状态码、响应体内容等。当健康检查的响应满足这些条件时，服务将被认为是健康的。否则，它将被认为是不健康的。这允许更细粒度的控制，确保服务不仅是可达的，而且是正常运行的。可选字段，但如果使用 HTTP 健康检查，建议设置。
   - `Type`：匹配类型。这个字段定义了你想在健康检查响应中匹配的具体部分。它有三个有效的值：
-      - `status`：匹配 HTTP 响应的状态码。
+      - `status`：匹配 HTTP 响应的状态码列表，如 `[200,201,204]`。
       - `body`：匹配 HTTP 响应的主体内容。
       - `headers`：匹配 HTTP 响应的头部信息。此字段是必须的。
   - `Value`：期望的数据。此字段与 `Type` 字段一起使用，定义了预期的匹配值。例如，如果 `Type` 设置为 `status`，`Value` 可能会设置为 `200`，表示期望 HTTP 响应的状态码为 200。此字段是必须的。
@@ -52,7 +52,10 @@ pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 500},''))"
     "Matches": [
       {
         "Type": "status",
-        "Value": "200"
+        "Value": [
+          200,
+          201
+        ]
       }
     ]
   }
@@ -137,7 +140,8 @@ connection: keep-alive
 > 实际场景中，过于频繁的健康检查虽然可以快速隔离不健康的端点，但也势必会给后端服务造成压力。同样较低的最大失败数判定，也会快速隔离不健康的端点提升服务的可用性，但也会因为偶尔的网络抖动、服务突发负载过高等原因导致大量端点“被”下线，导致服务的不可用。
 
 ```shell
-"Services": {
+{
+  "Services": {
     "backendService1": {
       "Endpoints": {
         "127.0.0.1:8081": {
@@ -155,12 +159,16 @@ connection: keep-alive
         "Matches": [
           {
             "Type": "status",
-            "Value": "200"
+            "Value": [
+              200,
+              201
+            ]
           }
         ]
       }
     }
   }
+}
 ```
 
 配置生效后，再次进行测试可以看到不健康的端点已经被隔离。

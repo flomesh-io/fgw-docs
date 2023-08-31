@@ -139,8 +139,8 @@ prism_syntax_highlighting = true
 # Version params
 fgw_branch = "main"
 fgw_version = "v1.0.0"
-min_pipy_version = "0.90.2-41"
-pipy_version = "0.90.2-41"
+min_pipy_version = "0.90.3-2"
+pipy_version = "0.90.3-2"
 
 [[params.versions]]
   version = "v1.0.0 (latest)"

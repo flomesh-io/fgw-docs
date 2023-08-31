@@ -1,6 +1,6 @@
 ---
 title: "TLS 透传"
-description: ""
+description: "TLS透传是指负载均衡器或网关不解密TLS流量，而是直接将加密数据传送到后端服务器，由后端服务器进行解密和处理。"
 weight: 2
 ---
 
@@ -28,9 +28,13 @@ TLS 透传（TLS Passthrough）是代理服务器处理 TLS 请求的两种方�
 
 > TLS 的后端服务，本文档使用 `https://httpbin.org` 作为后端服务。
 
+## 配置说明
+
+### 示例
+
 ## 配置
 
-1. 设置监听端口的协议，参考[监听端口配置文档](/reference/configuration/#2-监听端口配置listeners)，我们选择 `TLS` 作为端口的协议。
+1. 设置监听端口的协议，参考 [监听端口配置文档](/reference/configuration/#2-监听端口配置listeners)，我们选择 `TLS` 作为端口的协议。
 
 ```json
 {
@@ -54,7 +58,7 @@ TLS 透传（TLS Passthrough）是代理服务器处理 TLS 请求的两种方�
 }
 ```
 
-3. TLS 透传是工作在 L4 上，配置路由规则时使用 [TLS 协议端口号 Passthrough 路由规则配置](/reference/configuration/#33-端口号配置protocol-tls-tlsmodetype-passthrough-的配置格式)，键值分别为上游的域名地址（或域名地址+端口）。这里，我们使用配置 `"httpbin.org": "httpbin.org"`。
+3. TLS 透传是工作在 L4 上，配置路由规则时使用 [TLS 协议端口号 Passthrough 路由规则配置](/reference/configuration/#33-端口号配置protocol-tls-tlsmodetype-passthrough-的配置格式)，键值分别为上游的域名地址（或域名地址 + 端口）。这里，我们使用配置 `"httpbin.org": "httpbin.org"`。
 
 ```json
 {

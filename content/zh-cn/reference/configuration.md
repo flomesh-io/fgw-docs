@@ -25,10 +25,13 @@ weight: 1
 
 ### 2.1 AccessControlLists
 
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|blacklist|黑名单列表| ['1.1.1.1', '2.2.2.0/24']|否|
-|2|whitelist|白名单列表| ['1.1.1.1', '2.2.2.0/24']|否|
+| 编号 | 配置项名称 | 用途描述                                                | 参考值                    | 是否必须 |
+|:----:|:---------- |:------------------------------------------------------- |:------------------------- |:--------:|
+|  1   | blacklist  | 黑名单列表                                              | ["1.1.1.1", "2.2.2.0/24"] |    否    |
+|  2   | whitelist  | 白名单列表                                              | ["1.1.1.1", "2.2.2.0/24"] |    否    |
+|  3   | enableXFF  | 是否检查请求头 x-forwarded-for 中的 IP 地址，默认不检查 | true                      |    否    |
+|  4   | status     | 拒绝访问后返回的响应状态码，不指定时默认为 403          | 403                       |    否    |
+|  5   | message    | 拒绝访问后返回的响应内容，不指定时默认为空字符          | Forbidden                 | 否         |
 
 ### 2.2 TLS
 
@@ -60,24 +63,26 @@ weight: 1
 
 #### 3.1.1 域名
 
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|RouteType|路由类型|HTTP、GRPC|是|
-|2|Matches|匹配规则| 参考 3.1.1.1 |是|
-|3|RateLimit|域名限流配置|参考 3.1.1.2|否|
+| 编号 | 配置项名称         | 用途描述                                                                                                       | 参考值       | 是否必须 |
+|:----:|:------------------ |:-------------------------------------------------------------------------------------------------------------- |:------------ |:--------:|
+|  1   | RouteType          | 路由类型                                                                                                       | HTTP、GRPC   |    是    |
+|  2   | Matches            | 匹配规则                                                                                                       | 参考 3.1.1.1 |    是    |
+|  3   | RateLimit          | 域名限流配置                                                                                                   | 参考 3.1.1.2 |    否    |
+|  4   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |              | 否         |
 
 ##### 3.1.1.1 Matches
 
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|Path|HTTP uri path 匹配|参考 3.1.1.1.1 |否|
-|2|Headers|HTTP header 匹配|参考 3.1.1.1.2|否|
-|3|Methods|允许的 HTTP Method| ['GET', 'POST', 'DELETE', 'PUT']|否|
-|4|QueryParams|HTTP 请求参数匹配|参考 3.1.1.1.3|否|
-|5|BackendService|后端服务|{<br> " 服务名 ": 100<br>}|BackendService 或 ServerRoot 必须有一个存在|
-|6|ServerRoot|静态页面所对应的目录| "/var/www/html" |BackendService 或 ServerRoot 必须有一个存在|
-|7|Method|RouteType 为 GRPC 时，匹配服务| 参考 3.1.1.1.4|否|
-|8|RateLimit|路由限流配置|参考 3.1.1.2|否|
+| 编号 | 配置项名称     | 用途描述                       | 参考值                           |                  是否必须                   |
+|:----:|:-------------- |:------------------------------ |:-------------------------------- |:-------------------------------------------:|
+|  1   | Path           | HTTP uri path 匹配             | 参考 3.1.1.1.1                   |                     否                      |
+|  2   | Headers        | HTTP header 匹配               | 参考 3.1.1.1.2                   |                     否                      |
+|  3   | Methods        | 允许的 HTTP Method             | ['GET', 'POST', 'DELETE', 'PUT'] |                     否                      |
+|  4   | QueryParams    | HTTP 请求参数匹配              | 参考 3.1.1.1.3                   |                     否                      |
+|  5   | BackendService | 后端服务                       | {<br> " 服务名 ": 100<br>}       | BackendService 或 ServerRoot 必须有一个存在 |
+|  6   | ServerRoot     | 静态页面所对应的目录           | "/var/www/html"                  | BackendService 或 ServerRoot 必须有一个存在 |
+|  7   | Method         | RouteType 为 GRPC 时，匹配服务 | 参考 3.1.1.1.4                   |                     否                      |
+|  8   | RateLimit      | 路由限流配置                   | 参考 3.1.1.2                     |                     否                      |
+|  9   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |              | 否         |
 
 ###### 3.1.1.1.1 Path
 
@@ -145,16 +150,17 @@ weight: 1
 
 ### 4.1 服务 配置格式
 
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|StickyCookieName|使用 cookie sticky 负载均衡时，cookie 的名称| "\_srv\_id" |否|
-|2|StickyCookieExpires|使用 cookie sticky 时，cookie 的有效期|3600|否|
-|3|HealthCheck|对上游服务的健康检查配置| 参考 4.1.1 |否|
-|4|Endpoints|上游服务信息| 参考 4.1.2 |是|
-|5|Filters|过滤器配置 | 参考 4.1.3 | 否|
-|6|CircuitBreaking|熔断配置，用于 Protocol 为 HTTP、HTTPS 的场景| 参考 4.1.4 | 否|
-|7|RetryPolicy| 重试配置，用于 Protocol 为 HTTP、HTTPS 的场景| 参考 4.1.5 | 否 |
-|8|UpstreamCert| 访问上游使用 默认使用的 TLS 证书| 参考 4.1.6 | 否|
+| 编号 | 配置项名称          | 用途描述                                                                                                  | 参考值      | 是否必须 |
+|:----:|:------------------- |:--------------------------------------------------------------------------------------------------------- |:----------- |:--------:|
+|  1   | StickyCookieName    | 使用 cookie sticky 负载均衡时，cookie 的名称                                                              | "\_srv\_id" |    否    |
+|  2   | StickyCookieExpires | 使用 cookie sticky 时，cookie 的有效期                                                                    | 3600        |    否    |
+|  3   | HealthCheck         | 对上游服务的健康检查配置                                                                                  | 参考 4.1.1  |    否    |
+|  4   | Endpoints           | 上游服务信息                                                                                              | 参考 4.1.2  |    是    |
+|  5   | Filters             | 过滤器配置                                                                                                | 参考 4.1.3  |    否    |
+|  6   | CircuitBreaking     | 熔断配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.4  |    否    |
+|  7   | RetryPolicy         | 重试配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.5  |    否    |
+|  8   | UpstreamCert        | 访问上游使用 默认使用的 TLS 证书                                                                          | 参考 4.1.6  |    否    |
+|  9   | Algorithm           | 负载均衡算法，支持 RoundRobinLoadBalancer（未指定时默认使用）、HashingLoadBalancer、LeastConnectionLoadBalancer | "RoundRobinLoadBalancer"            |    否    |
 
 #### 4.1.1 HealthCheck
 
