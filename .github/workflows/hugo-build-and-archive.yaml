@@ -18,6 +18,10 @@ jobs:
       with:
         hugo-version: "0.110.0"
 
+    - name: Install Node.js Dependencies
+      run: npm install
+      working-directory: ${{ github.workspace }}
+
     - name: Build Hugo Site
       run: hugo --minify
 
