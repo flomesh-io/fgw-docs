@@ -1,0 +1,33 @@
+name: Hugo Build and Archive
+
+on:
+  push:
+    branches:
+      - main  # 或你的主要分支名称
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: "0.110.0"
+
+    - name: Build Hugo Site
+      run: hugo --minify
+
+    - name: Archive Public Folder
+      run: |
+        zip -r public.zip public
+      working-directory: ${{ github.workspace }}
+
+    - name: Upload Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: public-archive
+        path: public.zip
