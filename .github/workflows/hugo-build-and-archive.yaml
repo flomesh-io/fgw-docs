@@ -3,7 +3,7 @@ name: Hugo Build and Archive
 on:
   push:
     branches:
-      - main  # 或你的主要分支名称
+      - main
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: "0.110.0"
+        extended: true
 
     - name: Install Node.js Dependencies
       run: npm install
