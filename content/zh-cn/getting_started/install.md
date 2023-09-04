@@ -32,7 +32,7 @@ pipy ./pjs/main.js
 运行 Repo 模式，我们可以使用 FGW 的 Docker 镜像。
 
 ```shell
-docker run --rm -d --name fgw -p 6060:6060 flomesh/fgw:{{< param pipy_version >}}
+docker run --rm -d --name fgw -p 6060:6060 flomesh/fgw:latest
 ```
 
 执行下面的命令启动：
