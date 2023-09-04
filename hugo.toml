@@ -17,7 +17,7 @@ enableGitInfo = true
 
 # Comment out to enable taxonomies in Docsy
 disableKinds = ["taxonomy", "taxonomies"]
-
+ignoreErrors = ["error-disable-taxonomy"]
 # You can add your own taxonomies
 [taxonomies]
 tag = "tags"
