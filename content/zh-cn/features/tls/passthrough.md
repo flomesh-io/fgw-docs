@@ -30,7 +30,19 @@ TLS 透传（TLS Passthrough）是代理服务器处理 TLS 请求的两种方�
 
 ## 配置说明
 
+在处理 TLS 透传时，配置非常简单。
+
+- `TLSModeType`：设置为 `Passthrough`。这种模式下FGW 不会终止 TLS 连接，而是将加密的流量直接传递给后端服务，这意味着后端服务必须能够处理 TLS 解密。
+
 ### 示例
+
+```json
+{
+  "TLS": {
+    "TLSModeType": "Passthrough"
+  }
+}
+```
 
 ## 配置
 

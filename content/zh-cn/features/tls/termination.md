@@ -18,7 +18,29 @@ TLS 卸载是一种网络架构模式，它允许网络设备或服务器在接�
 
 ## 配置说明
 
+配置以下参数以启用和配置 TLS 卸载：
+
+  * `TLSModeType`：定义 TLS 工作模式，设置为 "Terminate" 启动 TLS 卸载）。
+  * `mTLS`：定义是否启用双向 TLS，增加额外的安全层来验证客户端的身份。
+  * `Certificates`：包括以下三个配置项来配置 TLS 证书信息：
+    * `CertChain`：服务器的证书链，通常开始于服务器的证书，后跟任何中间证书。
+    * `PrivateKey`：用于与证书链中的服务器证书配对的私钥。
+    * `IssuingCA`：用于签名证书链中的服务器证书的证书机构（CA）证书。
+
 ### 示例
+
+```json
+{
+  "TLS": {
+    "TLSModeType": "Terminate",
+    "Certificates": {
+      "CertChain": "—–BEGIN CERTIFICATE—–\n...",
+      "PrivateKey": "—–BEGIN RSA PRIVATE KEY—–\n...",
+      "IssuingCA": "—–BEGIN CERTIFICATE—–\n..."
+    }
+  }
+}
+```
 
 ## 配置
 
