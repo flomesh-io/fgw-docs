@@ -1,6 +1,6 @@
 ---
 title: "Debugging"
 description: ""
-weight: 2
+weight: 8
 draft: true
 ---
