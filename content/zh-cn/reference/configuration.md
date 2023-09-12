@@ -11,6 +11,23 @@ weight: 1
 |1|EnableDebug|是否输出调试日志信息|true，false|否|
 |2|StripAnyHostPort|是否忽略 HTTP 请求头中 Host 的端口号，<br>比如：将 Host: [www.aaa.com:8080](http://www.aaa.com:8080) <br>视为 Host: [www.aaa.com](http://www.aaa.com) |true，false|否|
 |3|DefaultPassthroughUpstreamPort|TLS Passthrough 场景，<br>如果没有配置上游端口，则使用此端口号|1~65535，通常设置为 443|否|
+|4|SocketTimeout|配置socket网络超时时间（单位：秒）|大于0，默认是60|否|  
+|5|PidFile|将pipy进程id写入到文件|例子：/var/log/pipy.pid|否|  
+|6|ResourceUsage|配置采集pipy cpu、mem使用率|参考 1.1|否|
+|7|HealthCheckLog|配置健康检查日志用的存储服务器信息|参考1.2|否|
+
+### 1.1 ResourceUsage  
+|编号|配置项名称|用途描述|可选值|是否必须|  
+|:----:|:---------|:-----|:------|:-------:|
+|1|ScrapeInterval|采集cpu、mem使用率的时间间隔（单位：秒）|大于0，建议60|是|   
+|2|StorageAddress|存储cpu、mem使用率的REST url|如果没有配置就不存储|否|  
+|3|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|  
+
+### 1.2 HealthCheckLog  
+|编号|配置项名称|用途描述|可选值|是否必须|  
+|:----:|:---------|:-----|:------|:-------:|  
+|1|StorageAddress|存储健康检查日志的REST url|如果没有配置就不存储健康检查日志|否|  
+|2|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|  
 
 ## 2. 监听端口配置（Listeners）
 
