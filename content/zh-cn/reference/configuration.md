@@ -11,23 +11,23 @@ weight: 1
 |1|EnableDebug|是否输出调试日志信息|true，false|否|
 |2|StripAnyHostPort|是否忽略 HTTP 请求头中 Host 的端口号，<br>比如：将 Host: [www.aaa.com:8080](http://www.aaa.com:8080) <br>视为 Host: [www.aaa.com](http://www.aaa.com) |true，false|否|
 |3|DefaultPassthroughUpstreamPort|TLS Passthrough 场景，<br>如果没有配置上游端口，则使用此端口号|1~65535，通常设置为 443|否|
-|4|SocketTimeout|配置socket网络超时时间（单位：秒）|大于0，默认是60|否|  
-|5|PidFile|将pipy进程id写入到文件|例子：/var/log/pipy.pid|否|  
+|4|SocketTimeout|配置socket网络超时时间（单位：秒）|大于0，默认是60|否|
+|5|PidFile|将pipy进程id写入到文件|例子：/var/log/pipy.pid|否|
 |6|ResourceUsage|配置采集pipy cpu、mem使用率|参考 1.1|否|
 |7|HealthCheckLog|配置健康检查日志用的存储服务器信息|参考1.2|否|
 
-### 1.1 ResourceUsage  
-|编号|配置项名称|用途描述|可选值|是否必须|  
+### 1.1 ResourceUsage
+|编号|配置项名称|用途描述|可选值|是否必须|
 |:----:|:---------|:-----|:------|:-------:|
-|1|ScrapeInterval|采集cpu、mem使用率的时间间隔（单位：秒）|大于0，建议60|是|   
-|2|StorageAddress|存储cpu、mem使用率的REST url|如果没有配置就不存储|否|  
-|3|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|  
+|1|ScrapeInterval|采集cpu、mem使用率的时间间隔（单位：秒）|大于0，建议60|是|
+|2|StorageAddress|存储cpu、mem使用率的REST url|如果没有配置就不存储|否|
+|3|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|
 
-### 1.2 HealthCheckLog  
-|编号|配置项名称|用途描述|可选值|是否必须|  
-|:----:|:---------|:-----|:------|:-------:|  
-|1|StorageAddress|存储健康检查日志的REST url|如果没有配置就不存储健康检查日志|否|  
-|2|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|  
+### 1.2 HealthCheckLog
+|编号|配置项名称|用途描述|可选值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|StorageAddress|存储健康检查日志的REST url|如果没有配置就不存储健康检查日志|否|
+|2|Authorization|访问REST url用的 Basic认证信息|如果没有启用认证就不需要配置|否|
 
 ## 2. 监听端口配置（Listeners）
 
@@ -85,7 +85,7 @@ weight: 1
 |  1   | RouteType          | 路由类型                                                                                                       | HTTP、GRPC   |    是    |
 |  2   | Matches            | 匹配规则                                                                                                       | 参考 3.1.1.1 |    是    |
 |  3   | RateLimit          | 域名限流配置                                                                                                   | 参考 3.1.1.2 |    否    |
-|  4   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |              | 否         |
+|  4   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |     参考 2.1    | 否         |
 
 ##### 3.1.1.1 Matches
 
@@ -95,11 +95,12 @@ weight: 1
 |  2   | Headers        | HTTP header 匹配               | 参考 3.1.1.1.2                   |                     否                      |
 |  3   | Methods        | 允许的 HTTP Method             | ['GET', 'POST', 'DELETE', 'PUT'] |                     否                      |
 |  4   | QueryParams    | HTTP 请求参数匹配              | 参考 3.1.1.1.3                   |                     否                      |
-|  5   | BackendService | 后端服务                       | {<br> " 服务名 ": 100<br>}       | BackendService 或 ServerRoot 必须有一个存在 |
+|  5   | BackendService | 动态代理用的后端服务                       | 参考 3.1.1.1.4                  | BackendService 或 ServerRoot 必须有一个存在 |
 |  6   | ServerRoot     | 静态页面所对应的目录           | "/var/www/html"                  | BackendService 或 ServerRoot 必须有一个存在 |
-|  7   | Method         | RouteType 为 GRPC 时，匹配服务 | 参考 3.1.1.1.4                   |                     否                      |
+|  7   | Method         | RouteType 为 GRPC 时，匹配服务 | 参考 3.1.1.1.5                   |                     否                      |
 |  8   | RateLimit      | 路由限流配置                   | 参考 3.1.1.2                     |                     否                      |
-|  9   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |              | 否         |
+|  9   | AccessControlLists | 访问控制列表，设置访问者 IP 地址黑白名单。如果设置了白名单，就以白名单为准；如果未设置白名单，就以黑名单为准。 |     参考 2.1     | 否         |
+|  10  |	Filters       |	过滤器配置                     |	参考 3.1.1.1.6	                 | 否                                         |
 
 ###### 3.1.1.1.1 Path
 
@@ -122,7 +123,18 @@ weight: 1
 |1|Exact|精确匹配 Params|"QueryParams": {<br>    "Exact": {<br>        "abc": "1"<br>        },<br>       "Regex": {<br>         "xxx": "^[0-9]+"<br>    }<br>    }|否|
 |2|Regex|正则匹配 Params|同上|否|
 
-###### 3.1.1.1.4 Method
+###### 3.1.1.1.4 BackendService
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|后端服务名|后端服务的名称，比如："backendService1" |参考：3.1.1.1.4.1|是|
+
+###### 3.1.1.1.4.1 BackendService后端服务名
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|Weight|权重|整数|是|
+|2|	Filters  |	过滤器配置   |	参考 3.1.1.1.6	     | 否    |
+
+###### 3.1.1.1.5 Method
 
 |编号|配置项名称|用途描述|参考值|是否必须|
 |:----:|:---------|:-----|:------|:-------:|
@@ -159,6 +171,56 @@ weight: 1
 |:----:|:---------|:-----|:------|:-------:|
 |1|域名|服务域名和对应的上游服务列表|"abc.com": <br>{<br> "service1": 100<br>}|是|
 
+##### 3.1.1.1.6 Filters
+
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|RequestHeaderModifier| 修改 HTTP 请求头 |参考 3.1.1.1.6.1|否|
+|2|ResponseHeaderModifier|修改 HTTP 应答头|参考 3.1.1.1.6.2|否|
+|3|RequestRedirect|请求重定向|参考 3.1.1.1.6.3|否|
+|4|URLRewrite|请求的 URL 重写|参考 3.1.1.1.6.4|否|
+
+###### 3.1.1.1.6.1 RequestHeaderModifier
+
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|set|设置 HTTP header|[<br>{<br>"name": "my-header1",<br>"value": "foo"<br>}<br>]|否|
+|2|add|增加 HTTP header|[<br>{<br>"name": "my-header2",<br>"value": "bar"<br>}<br>]|否|
+|3|remove|删除 HTTP header|[<br>"my-header3",<br>"my-header4"<br>]|否|
+
+###### 3.1.1.1.6.2 ResponseHeaderModifier
+
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|set|设置 HTTP header|[<br>{<br>"name": "my-header1",<br>"value": "foo"<br>}<br>]|否|
+|2|add|增加 HTTP header|[<br>{<br>"name": "my-header2",<br>"value": "bar"<br>}<br>]|否|
+|3|remove|删除 HTTP header|[<br>"my-header3",<br>"my-header4"<br>]|否|
+
+###### 3.1.1.1.6.3 RequestRedirect
+
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|scheme|协议描述|http、https|否|
+|2|hostname|重定向到的域名||否|
+|3|path|重定向到的路径||是|
+|4|port|重定向到的端口||否|
+|5|statusCode|重定向返回的状态码|301、302|是|
+
+###### 3.1.1.1.6.4 URLRewrite
+
+| 编号 | 配置项名称 | 用途描述        | 参考值          | 是否必须 |
+|:----:|:---------- |:--------------- |:--------------- |:--------:|
+|  1   | hostname   | 主机名/域名重写 | sub.example.com |    否    |
+|  2   | path           |  路径重写规则               |       参考 3.1.1.1.6.4.1          |      是     |
+
+###### 3.1.1.1.6.4.1 URLRewrite Path 规则
+
+|编号|配置项名称|用途描述|参考值|是否必须|
+|:----:|:---------|:-----|:------|:-------:|
+|1|type|Url 重写匹配规则|ReplacePrefixMatch：前缀匹配<br>ReplaceFullPath：全路径匹配|是|
+|2|replacePrefixMatch|前缀匹配时替换 path||type 为 ReplacePrefixMatch 时，必须配置|
+|3|replaceFullPath|全路径匹配时替换 path||type 位 ReplaceFullPath 时，必须配置|
+
 ## 4. 服务配置（Services）
 
 |编号|配置项名称|用途描述|参考值|是否必须|
@@ -172,12 +234,11 @@ weight: 1
 |  1   | StickyCookieName    | 使用 cookie sticky 负载均衡时，cookie 的名称                                                              | "\_srv\_id" |    否    |
 |  2   | StickyCookieExpires | 使用 cookie sticky 时，cookie 的有效期                                                                    | 3600        |    否    |
 |  3   | HealthCheck         | 对上游服务的健康检查配置                                                                                  | 参考 4.1.1  |    否    |
-|  4   | Endpoints           | 上游服务信息                                                                                              | 参考 4.1.2  |    是    |
-|  5   | Filters             | 过滤器配置                                                                                                | 参考 4.1.3  |    否    |
-|  6   | CircuitBreaking     | 熔断配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.4  |    否    |
-|  7   | RetryPolicy         | 重试配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.5  |    否    |
-|  8   | UpstreamCert        | 访问上游使用 默认使用的 TLS 证书                                                                          | 参考 4.1.6  |    否    |
-|  9   | Algorithm           | 负载均衡算法，支持 RoundRobinLoadBalancer（未指定时默认使用）、HashingLoadBalancer、LeastConnectionLoadBalancer | "RoundRobinLoadBalancer"            |    否    |
+|  4   | Endpoints           | 上游服务信息                                                                                           | 参考 4.1.2  |    是  |
+|  5   | CircuitBreaking     | 熔断配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.4  |    否    |
+|  6   | RetryPolicy         | 重试配置，用于 Protocol 为 HTTP、HTTPS 的场景                                                             | 参考 4.1.5  |    否    |
+|  7   | UpstreamCert        | 访问上游使用 默认使用的 TLS 证书                                                                          | 参考 4.1.6  |    否    |
+|  8   | Algorithm           | 负载均衡算法，支持 RoundRobinLoadBalancer（未指定时默认使用）、HashingLoadBalancer、LeastConnectionLoadBalancer | "RoundRobinLoadBalancer"            |    否    |
 
 #### 4.1.1 HealthCheck
 
@@ -194,7 +255,7 @@ weight: 1
 |编号|配置项名称|用途描述|参考值|是否必须|
 |:----:|:---------|:-----|:------|:-------:|
 |1|Type|匹配类型|status、body、headers|是|
-|2|Value|期望的数据||是|
+|2|Value|期望的数据|Type 为 status 时配置HTTP状态码数组，比如： [ 200 ] |是|
 |3|Name|type 为 headers 时，http 头字段名||否|
 
 #### 4.1.2 Endpoints
@@ -210,57 +271,6 @@ weight: 1
 |1|Weight|权重|整数|是|
 |2|Tags|标记||是|
 |3|UpstreamCert|访问上游用的 TLS 证书||否|
-
-#### 4.1.3 Filters
-
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|RequestHeaderModifier| 修改 HTTP 请求头 |参考 4.1.3.1|否|
-|2|ResponseHeaderModifier|修改 HTTP 应答头|参考 4.1.3.2|否|
-|3|RequestRedirect|请求重定向|参考 4.1.3.3|否|
-|4|HTTPURLRewriteFilter|请求的 URL 重写|参考 4.3.1.4|否|
-
-##### 4.1.3.1 RequestHeaderModifier
-
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|set|设置 HTTP header|[<br>{<br>"name": "my-header1",<br>"value": "foo"<br>}<br>]|否|
-|2|add|增加 HTTP header|[<br>{<br>"name": "my-header2",<br>"value": "bar"<br>}<br>]|否|
-|3|remove|删除 HTTP header|[<br>"my-header3",<br>"my-header4"<br>]|否|
-
-##### 4.1.3.2 ResponseHeaderModifier
-
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|set|设置 HTTP header|[<br>{<br>"name": "my-header1",<br>"value": "foo"<br>}<br>]|否|
-|2|add|增加 HTTP header|[<br>{<br>"name": "my-header2",<br>"value": "bar"<br>}<br>]|否|
-|3|remove|删除 HTTP header|[<br>"my-header3",<br>"my-header4"<br>]|否|
-
-##### 4.1.3.3 RequestRedirect
-
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|scheme|协议描述|http、https|否|
-|2|hostname|重定向到的域名||否|
-|3|path|重定向到的路径||是|
-|4|port|重定向到的端口||否|
-|5|statusCode|重定向返回的状态码|301、302|是|
-
-##### 4.1.3.4 HTTPURLRewriteFilter
-
-| 编号 | 配置项名称 | 用途描述        | 参考值          | 是否必须 |
-|:----:|:---------- |:--------------- |:--------------- |:--------:|
-|  1   | hostname   | 主机名/域名重写 | sub.example.com |    否    |
-|  2   | path           |  路径重写规则               |       参考 4.1.3.4.1          |      是     |
-
-###### 4.1.3.4.1 HTTPURLRewriteFilter Path 规则
-
-|编号|配置项名称|用途描述|参考值|是否必须|
-|:----:|:---------|:-----|:------|:-------:|
-|1|type|Url 重写匹配规则|ReplacePrefixMatch：前缀匹配<br>ReplaceFullPath：全路径匹配|是|
-|2|replacePrefixMatch|前缀匹配时的 path||type 为 ReplacePrefixMatch 时，必须配置|
-|3|replacePrefix|前缀匹配时替换成这个 path|默认为："/"|type 为 ReplacePrefixMatch 时，可配置|
-|4|replaceFullPath|全路径匹配时的 path||type 位 ReplaceFullPath 时，必须配置|
 
 #### 4.1.4 CircuitBreaking
 
