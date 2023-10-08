@@ -112,7 +112,9 @@ FGW 的 HTTP 头部控制功能分为 [请求头部控制 `RequestHeaderModifier
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]

@@ -150,7 +150,9 @@ weight: 0
               "Path": "/hello"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           },
           {
@@ -159,7 +161,9 @@ weight: 0
               "Path": "/hi"
             },
             "BackendService": {
-              "backendService2": 100
+              "backendService2": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -230,7 +234,9 @@ weight: 0
               "Path": "/hello"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           },
           {
@@ -239,7 +245,9 @@ weight: 0
               "Path": "/hi"
             },
             "BackendService": {
-              "backendService2": 100
+              "backendService2": {
+                "Weight": 100
+              }
             }
           }
         ]

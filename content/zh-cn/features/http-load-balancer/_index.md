@@ -74,7 +74,9 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -156,7 +158,9 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -269,7 +273,9 @@ server.csr
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -333,7 +339,9 @@ server.csr
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]

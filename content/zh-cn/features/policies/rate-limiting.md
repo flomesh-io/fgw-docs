@@ -151,7 +151,9 @@ FGW 中限流的粒度与 [熔断](/features/policies/circuit-breaking/) 等策�
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -199,7 +201,9 @@ FGW 中限流的粒度与 [熔断](/features/policies/circuit-breaking/) 等策�
           "Path": "/"
         },
         "BackendService": {
-          "backendService1": 100
+          "backendService1": {
+            "Weight": 100
+          }
         }
       }
     ],
@@ -265,7 +269,9 @@ connection: keep-alive
           "Path": "/echo"
         },
         "BackendService": {
-          "backendService1": 100
+          "backendService1": {
+            "Weight": 100
+          }
         },
         "RateLimit": {
           "Local": {
@@ -289,7 +295,9 @@ connection: keep-alive
           "Path": "/"
         },
         "BackendService": {
-          "backendService1": 100
+          "backendService1": {
+                "Weight": 100
+          }
         }
       }
     ]

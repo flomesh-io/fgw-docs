@@ -88,7 +88,9 @@ Service unavailable
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]

@@ -173,7 +173,9 @@ server.csr
   "RouteRules": {
     "8443": {
       "example.com": {
-        "backendService1": 100
+        "backendService1": {
+          "Weight": 100
+        }
       }
     }
   },

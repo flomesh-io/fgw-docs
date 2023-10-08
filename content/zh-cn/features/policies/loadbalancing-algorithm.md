@@ -76,7 +76,9 @@ pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 200},'Hi, world'))"
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]

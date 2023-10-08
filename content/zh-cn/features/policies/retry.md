@@ -76,7 +76,9 @@ FGW 的重试功能为架构提供了额外的稳定性和韧性。通过合理�
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]

@@ -83,7 +83,9 @@ weight: 1
   ],
   "RouteRules": {
     "8080": {
-      "backendService1": 100
+      "backendService1": {
+        "Weight": 100
+      }
     }
   },
   "Services": {

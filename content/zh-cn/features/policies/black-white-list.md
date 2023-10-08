@@ -115,7 +115,9 @@ curl http://localhost:8081/headers
               "Path": "/ip"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           },
           {
@@ -124,7 +126,9 @@ curl http://localhost:8081/headers
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
@@ -241,7 +245,9 @@ curl http://localhost:8079/headers
               "Path": "/ip"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           },
           {
@@ -250,7 +256,9 @@ curl http://localhost:8079/headers
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ],
@@ -298,7 +306,9 @@ connection: keep-alive
               "Path": "/ip"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             },
             "AccessControlLists": {
               "blacklist": [
@@ -312,7 +322,9 @@ connection: keep-alive
               "Path": "/"
             },
             "BackendService": {
-              "backendService1": 100
+              "backendService1": {
+                "Weight": 100
+              }
             }
           }
         ]
