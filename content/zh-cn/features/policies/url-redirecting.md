@@ -50,12 +50,14 @@ Hello, there
 {
   "Filters": [
     {
-      "Type": "RequestRedirect0",
-      "scheme": "https",
-      "hostname": "",
-      "path": "/abc",
-      "port": 8443,
-      "statusCode": 301
+      "Type": "RequestRedirect",
+      "RequestRedirect": {
+        "Scheme": "https",
+        "Hostname": "",
+        "Path": "/abc",
+        "Port": 8443,
+        "StatusCode": 301
+      }
     }
   ]
 }
@@ -131,24 +133,24 @@ Hello, world
 
 ```json
 {
-  "Services": {
-    "backendService1": {
-      "Endpoints": {
-        "127.0.0.1:8081": {
-          "Weight": 100
-        },
-        "Filters": [
-          {
-            "Type": "RequestRedirect",
-            "scheme": "http",
-            "path": "/",
-            "port": 8082,
-            "statusCode": 301
+  "Matches": [
+    {
+      "Path": {},
+      "BackendService": {},
+      "Filters": [
+        {
+          "Type": "RequestRedirect",
+          "RequestRedirect": {
+            "Scheme": "http",
+            "Hostname": "127.0.0.1",
+            "Path": "/",
+            "Port": 8082,
+            "StatusCode": 301
           }
-        ]
-      }
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 

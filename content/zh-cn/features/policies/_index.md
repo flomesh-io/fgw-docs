@@ -14,12 +14,15 @@ Flomesh Gateway (FGW) 提供了一系列先进的负载均衡策略，以确保�
 - [会话保持](/features/policies/session-sticky/)
 - [健康检查](/features/policies/healthcheck/)
 - [重试](/features/policies/retry/)
-- [HTTP 头部控制](/features/policies/header-manipulate/)
-- [请求重定向](/features/policies/url-redirecting/)
-- [路径重写](/features/policies/url-rewrite/)
-- [URL 重写](/features/policies/rate-limiting/)
-- [会话保持](/features/policies/session-sticky/)
+
 <!-- - [流量镜像](/features/policies/request-mirror) -->
+
+有些策略则是路由或者路由+服务的粒度：
+
+- [路径重写](/features/policies/url-rewrite/)
+- [请求重定向](/features/policies/url-redirecting/)
+- [URL 重写](/features/policies/rate-limiting/)
+- [HTTP 头部控制](/features/policies/header-manipulate/)
 
 当然还有粒度更加灵活的策略，如 [限流]()，可以作用于域名和路由的粒度。
 
@@ -34,8 +37,32 @@ Flomesh Gateway (FGW) 提供了一系列先进的负载均衡策略，以确保�
         "Matches": [
           {
             "Path": {},
-            "BackendService": {},
-            "RateLimit": {}
+            "BackendService": {
+              "serviceName": {
+                "Weight": 100,
+                "Filters": [{
+                  "Type": ""
+                }]
+              }
+            },
+            "RateLimit": {},
+            "Filters": [
+              {
+                "Type": "RequestHeaderModifier"
+              },
+              {
+                "Type": "ResponseHeaderModifier"
+              },
+              {
+                "Type": "RequestMirror"
+              },
+              {
+                "Type": "RequestRedirect"
+              },
+              {
+                "Type": "HTTPURLRewriteFilter"
+              }
+            ]
           }
         ],
         "RateLimit": {}
@@ -45,24 +72,8 @@ Flomesh Gateway (FGW) 提供了一系列先进的负载均衡策略，以确保�
   "Services": {
     "backendService": {
       "Endpoints": {},
+      "Filters": {},
       "CircuitBreaking": {},
-      "Filters": [
-        {
-          "Type": "RequestHeaderModifier"
-        },
-        {
-          "Type": "ResponseHeaderModifier"
-        },
-        {
-          "Type": "RequestMirror"
-        },
-        {
-          "Type": "RequestRedirect"
-        },
-        {
-          "Type": "HTTPURLRewriteFilter"
-        }
-      ],
       "MaxRequestsPerConnection": 1,
       "MaxPendingRequests": 1,
       "RetryPolicy": {},

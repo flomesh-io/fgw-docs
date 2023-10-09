@@ -24,29 +24,29 @@ URL 重写常被用在以下场景：
 后端服务可以使用 Pipy 来模拟一个返回正在请求的路径的服务。
 
 ```shell
-pipy().listen(8081).serveHTTP(msg => new Message('You are requesting ' + msg.head.path))
+pipy -e "pipy().listen(8081).serveHTTP(msg => new Message('You are requesting ' + msg.head.headers.host + msg.head.path))"
 ```
 
 它会返回我们正在请求的路径。
 
 ```shell
 curl http://localhost:8081/api/hi
-You are requesting /api/hi
+You are requesting localhost:8081/api/hi
 curl http://localhost:8081/user
-You are requesting /user
+You are requesting localhost:8081/user
 ```
 
 ## 配置说明
 
 下面参考 [URL重写文档](/reference/configuration/#4134-httpurlrewritefilter) 对配置字段进行说明。
 
-* `hostname`：重写后请求的目标域名或主机名。此字段可用于改变请求的目标地址，将流量引导至一个完全不同的域名或子域名。值为任何有效的域名，如 `example.com` 或 `sub.example.com`。可选字段，不配置时会继续使用原请求中 `host`。
-* `path`：对 path 路径的重写规则。
+* `Hostname`：重写后请求的目标域名或主机名。此字段可用于改变请求的目标地址，将流量引导至一个完全不同的域名或子域名。值为任何有效的域名，如 `example.com` 或 `sub.example.com`。可选字段，不配置时会继续使用原请求中 `host`。
+* `Path`：对 path 路径的重写规则。
 
-  - `type`：URL 重写匹配规则，此字段是必须的，它定义了路径重写时所采用的匹配方式。参考值有：`ReplacePrefixMatch` 表示前缀匹配，和 `ReplaceFullPath` 表示全路径匹配。选择合适的匹配规则是重写功能的基础。
-  - `replacePrefixMatch`：前缀匹配时的 path，当 `type` 字段设置为 `ReplacePrefixMatch` 时，此字段必须配置。它定义了需要被替换的 URL 前缀。例如，如果设置为 `/old-prefix`，那么所有以 `/old-prefix` 开始的路径都会被替换。
-  - `replacePrefix`：前缀匹配时替换成这个 path，当 `type` 字段设置为 `ReplacePrefixMatch` 时，此字段可以配置，但不是必须的。它定义了用来替换的新前缀。默认值为 `/`。例如，如果 `replacePrefixMatch` 设置为 `/old-prefix` 并且 `replacePrefix` 设置为 `/new-prefix`，那么 `/old-prefix/example` 会被重写为 `/new-prefix/example`。
-  - `replaceFullPath`：全路径匹配时的 path，当 `type` 字段设置为 `ReplaceFullPath` 时，此字段必须配置。它定义了需要完全匹配并替换的路径。例如，如果设置为 `/old-path/example`, 那么只有完全匹配到这个路径的请求会被重写。
+  - `Type`：URL 重写匹配规则，此字段是必须的，它定义了路径重写时所采用的匹配方式。参考值有：`ReplacePrefixMatch` 表示前缀匹配，和 `ReplaceFullPath` 表示全路径匹配。选择合适的匹配规则是重写功能的基础。
+  - `ReplacePrefixMatch`：前缀匹配时的 path，当 `Type` 字段设置为 `ReplacePrefixMatch` 时，此字段必须配置。它定义了需要被替换的 URL 前缀。例如，如果设置为 `/old-prefix`，那么所有以 `/old-prefix` 开始的路径都会被替换。
+  - `ReplacePrefix`：前缀匹配时替换成这个 path，当 `Type` 字段设置为 `ReplacePrefixMatch` 时，此字段可以配置，但不是必须的。它定义了用来替换的新前缀。默认值为 `/`。例如，如果 `ReplacePrefixMatch` 设置为 `/old-prefix` 并且 `ReplacePrefix` 设置为 `/new-prefix`，那么 `/old-prefix/example` 会被重写为 `/new-prefix/example`。
+  - `ReplaceFullPath`：全路径匹配时的 path，当 `Type` 字段设置为 `ReplaceFullPath` 时，此字段必须配置。它定义了需要完全匹配并替换的路径。例如，如果设置为 `/old-path/example`, 那么只有完全匹配到这个路径的请求会被重写。
 
 ### 示例
 
@@ -55,31 +55,38 @@ You are requesting /user
   "Filters": [
     {
       "Type": "HTTPURLRewriteFilter",
-      "hostname": "",
-      "path": {
-        "type": "ReplacePrefixMatch",
-        "replacePrefixMatch": "/path-prefix"
-      }
-    },
-     {
-      "Type": "HTTPURLRewriteFilter",
-      "hostname": "",
-      "path": {
-        "type": "ReplacePrefixMatch",
-        "replacePrefixMatch": "/path-prefix",
-        "replacePrefix": "/new-path-prefix"
+      "UrlRewrite": {
+        "Hostname": "",
+        "Path": {
+          "Type": "ReplacePrefixMatch",
+          "ReplacePrefixMatch": "/path-prefix"
+        }
       }
     },
     {
       "Type": "HTTPURLRewriteFilter",
-      "hostname": "",
-      "path": {
-        "type": "ReplaceFullPath",
-        "replaceFullPath": "/path-prefix"
+      "UrlRewrite": {
+        "Hostname": "",
+        "Path": {
+          "Type": "ReplacePrefixMatch",
+          "ReplacePrefixMatch": "/path-prefix",
+          "ReplacePrefix": "/new-path-prefix"
+        }
+      }
+    },
+    {
+      "Type": "HTTPURLRewriteFilter",
+      "UrlRewrite": {
+        "Hostname": "",
+        "Path": {
+          "Type": "ReplaceFullPath",
+          "ReplaceFullPath": "/path-prefix"
+        }
       }
     }
   ]
 }
+
 ```
 
 ## 配置
@@ -143,46 +150,43 @@ You are requesting /user
 
 ```shell
 curl http://localhost:8080/sample/api/hi
-You are requesting /sample/api/hi
+You are requesting localhost:8080/sample/api/hi
 ```
 
 ### 前缀重写配置
 
-假如前缀 `/sample` 并不是后端服务的合法路径，负载均衡器在转发请求的时候需要将该前缀去掉。我们使用 `ReplacePrefixMatch` 类型的 URL 重写规则，将 `/sample` 作为前缀匹配请求，然后将该前缀替换为 `/`。
+假如前缀 `/sample` 并不是后端服务的合法路径，负载均衡器在转发请求的时候需要将该前缀去掉。我们使用 `ReplacePrefixMatch` 类型的 URL 重写规则，将 `/sample` 作为前缀匹配请求，然后将该前缀替换为 `/release`。
 
 ```json
 {
-  "Services": {
-    "backendService1": {
-      "Endpoints": {
-        "127.0.0.1:8081": {
-          "Weight": 100
-        },
-        "Filters": [
-          {
-            "Type": "HTTPURLRewriteFilter",
-            "path": {
-              "type": "ReplaceFullPath",
-              "replaceFullPath": "/release"
+  "Matches": [
+    {
+      "Path": {},
+      "BackendService": {},
+      "Filters": [
+        {
+          "Type": "URLRewrite",
+          "UrlRewrite": {
+            "Path": {
+              "Type": "ReplacePrefixMatch",
+              "ReplacePrefixMatch": "/release"
             }
           }
-        ]
-      }
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
-还是使用之前的地址发送请求，这次后端服务接收到的请求路径为 `/api/hi`，前缀被移除。
+还是使用之前的地址发送请求，这次后端服务接收到的请求路径为 `/release/api/hi`，前缀被替换。
 
 ```shell
 curl http://localhost:8080/sample/api/hi
-You are requesting /api/hi
+You are requesting localhost:8080/release/api/hi
 ```
 
-其实这里 ` "replacePrefix": "/"` 这行配置去掉也可以达到同样的效果，有兴趣可以试一下。
-
-大多数情况下 `ReplacePrefixMatch` 前缀匹配规则足以满足大部分的场景，除了像上面移除前缀，也可以使用它来将前缀匹配为其他路径。比如将 `/sample/api/v1/hi` 改为 `/api/v2/hi`，这种非常适合做应用版本升级。
+如果想将其重写为 `/api/hi`，也就是去掉前缀场景，可以将 `ReplacePrefixMatch` 设置为 `""`（空字符串）。
 
 ### 全路径重写配置
 
@@ -192,24 +196,23 @@ You are requesting /api/hi
 
 ```json
 {
-  "Services": {
-    "backendService1": {
-      "Endpoints": {
-        "127.0.0.1:8081": {
-          "Weight": 100
-        },
-        "Filters": [
-          {
-            "Type": "HTTPURLRewriteFilter",
-            "path": {
-              "type": "ReplaceFullPath",
-              "replaceFullPath": "/404"
+  "Matches": [
+    {
+      "Path": {},
+      "BackendService": {},
+      "Filters": [
+        {
+          "Type": "URLRewrite",
+          "UrlRewrite": {
+            "Path": {
+              "Type": "ReplaceFullPath",
+              "ReplaceFullPath": "/404"
             }
           }
-        ]
-      }
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
@@ -217,5 +220,37 @@ You are requesting /api/hi
 
 ```shell
 curl http://localhost:8080/sample/api/hi
-You are requesting /404
+You are requesting localhost:8080/404
+```
+
+### 重写主机名
+
+在上面的例子中，后端服务打印的主机名都是 `localhost:8080` 也就是代理的地址。有时候，我们希望对上游服务隐藏代理的地址，这时候我们就需要重写主机名。
+
+这里就不需要重写路径了，而是需要 `Hostname` 字段。在下面的代码片段中，我们将主机名改写为 `example.com`。
+
+```json
+{
+  "Matches": [
+    {
+      "Path": {},
+      "BackendService": {},
+      "Filters": [
+        {
+          "Type": "URLRewrite",
+          "UrlRewrite": {
+            "Hostname": "example.com"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+应用配置后，我们还是发送原来的请求，可以看到后端服务拿到的主机名为 `example.com`。
+
+```shell
+curl http://localhost:8080/sample/api/hi
+You are requesting example.com/sample/api/hi
 ```

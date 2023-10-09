@@ -22,7 +22,7 @@ pipy -e "pipy().listen(8081).serveHTTP(msg => new Message({ 'status': 200, heade
 模拟的服务会返回如下信息，在消息体中返回原始请求的所有头部信息。
 
 ```shell
-curl -i http://localhost:8080/
+curl -i http://localhost:8081/
 HTTP/1.1 200 OK
 content-type: application/json
 server: Pipy
@@ -36,9 +36,9 @@ connection: keep-alive
 
 FGW 的 HTTP 头部控制功能分为 [请求头部控制 `RequestHeaderModifier`](/reference/configuration/#4131-requestheadermodifier) 和响应头部控制 [`ResponseHeaderModifier`](/reference/configuration/#4132-responseheadermodifier)，使用二者都可以对 HTTP 头部进行增加、删除、修改三种操作。
 
-- `set`: 设置 HTTP header。此字段用于设定或修改 HTTP 头部的值。如果指定的头部已存在，则其值将被替换为新值；如果不存在，则会添加此头部。它是一个可选字段，其值是一个对象列表，其中每个对象都包含“name”和“value”两个键。
-- `add`: 增加 HTTP header。此字段用于添加新的 HTTP 头部，而不会影响到原有的头部。如果指定的头部已存在，新的头部将被添加，而不会替换已有的头部。它是一个可选字段，其值格式与 `set` 字段相同。
-- `remove`: 删除 HTTP header。此字段用于从 HTTP 请求或响应中删除指定的头部。这对于确保某些敏感或不必要的头部不被暴露给客户端或后端服务是很有用的。它是一个可选字段，其值是一个字符串列表，代表要删除的头部名称。
+- `Set`: 设置 HTTP header。此字段用于设定或修改 HTTP 头部的值。如果指定的头部已存在，则其值将被替换为新值；如果不存在，则会添加此头部。它是一个可选字段，其值是一个对象列表，其中每个对象都包含`Name`和`Value`两个键。
+- `Add`: 增加 HTTP header。此字段用于添加新的 HTTP 头部，而不会影响到原有的头部。如果指定的头部已存在，新的头部将被添加，而不会替换已有的头部。它是一个可选字段，其值格式与 `Set` 字段相同。
+- `Remove`: 删除 HTTP header。此字段用于从 HTTP 请求或响应中删除指定的头部。这对于确保某些敏感或不必要的头部不被暴露给客户端或后端服务是很有用的。它是一个可选字段，其值是一个字符串列表，代表要删除的头部名称。
 
 ### 示例
 
@@ -47,41 +47,45 @@ FGW 的 HTTP 头部控制功能分为 [请求头部控制 `RequestHeaderModifier
   "Filters": [
     {
       "Type": "RequestHeaderModifier",
-      "set": [
-        {
-          "name": "host",
-          "value": "set-bar"
-        }
-      ],
-      "add": [
-        {
-          "name": "accept",
-          "value": "xxx"
-        }
-      ],
-      "remove": [
-        "user-agent",
-        "my-header4"
-      ]
+      "RequestHeaderModifier": {
+        "Set": [
+          {
+            "Name": "host",
+            "Value": "set-bar"
+          }
+        ],
+        "Add": [
+          {
+            "Name": "accept",
+            "Value": "xxx"
+          }
+        ],
+        "Remove": [
+          "user-agent",
+          "my-header4"
+        ]
+      }
     },
     {
       "Type": "ResponseHeaderModifier",
-      "set": [
-        {
-          "name": "dummy1",
-          "value": "set-bar"
-        }
-      ],
-      "add": [
-        {
-          "name": "dummy2",
-          "value": "add,baz"
-        }
-      ],
-      "remove": [
-        "dummy3",
-        "my-header8"
-      ]
+      "ResponseHeaderModifier": {
+        "set": [
+          {
+            "Name": "dummy1",
+            "Value": "set-bar"
+          }
+        ],
+        "Add": [
+          {
+            "Name": "dummy2",
+            "Value": "add,baz"
+          }
+        ],
+        "Remove": [
+          "dummy3",
+          "my-header8"
+        ]
+      }
     }
   ]
 }
@@ -164,44 +168,45 @@ connection: keep-alive
 
 ```json
 {
-  "Services": {
-    "backendService1": {
-      "Endpoints": {
-        "127.0.0.1:8081": {
-          "Weight": 100
-        },
-        "Filters": [
-          {
-            "Type": "RequestHeaderModifier",
-            "set": [
+  "Matches": [
+    {
+      "Path": {},
+      "BackendService": {},
+      "Filters": [
+        {
+          "Type": "RequestHeaderModifier",
+          "RequestHeaderModifier": {
+            "Set": [
               {
-                "name": "user-agent",
-                "value": "Apache-HttpClient/x.y.z"
+                "Name": "user-agent",
+                "Value": "Apache-HttpClient/x.y.z"
               }
             ],
-            "add": [
+            "Add": [
               {
-                "name": "client-id",
-                "value": "client-1"
+                "Name": "client-id",
+                "Value": "client-1"
               }
             ]
-          },
-          {
-            "Type": "ResponseHeaderModifier",
-            "set": [
+          }
+        },
+        {
+          "Type": "ResponseHeaderModifier",
+          "ResponseHeaderModifier": {
+            "Set": [
               {
-                "name": "server",
-                "value": "Tomcat Server"
+                "Name": "server",
+                "Value": "Tomcat Server"
               }
             ],
-            "remove": [
+            "Remove": [
               "token"
             ]
           }
-        ]
-      }
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
