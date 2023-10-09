@@ -69,7 +69,7 @@ FGW 的 HTTP 头部控制功能分为 [请求头部控制 `RequestHeaderModifier
     {
       "Type": "ResponseHeaderModifier",
       "ResponseHeaderModifier": {
-        "set": [
+        "Set": [
           {
             "Name": "dummy1",
             "Value": "set-bar"
