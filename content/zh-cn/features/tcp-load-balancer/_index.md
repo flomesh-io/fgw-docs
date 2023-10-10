@@ -1,7 +1,7 @@
 ---
 title: "TCP 负载均衡"
 description: "本文档将介绍如何配置 FGW 代理和负载均衡 TCP 流量。"
-weight: 1
+weight: 2
 ---
 
 ## 介绍

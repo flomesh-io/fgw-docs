@@ -1,7 +1,7 @@
 ---
 title: "HTTP/HTTPS 负载均衡"
 description: "L7 负载均衡功能可以对更高级别的网络协议（如 HTTP、HTTPS）进行有效的负载均衡。本文档将介绍如何使用 FGW 的 L7 负载均衡功能。"
-weight: 2
+weight: 3
 ---
 
 ## 介绍
