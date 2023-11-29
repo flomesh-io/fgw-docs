@@ -20,6 +20,7 @@ weight: 1
 |10|ErrorPage|对HTTP错误码返回自定义网页或链接，类型为列表 []|参考 1.4|否|
 |11|HTTP1PerRequestLoadBalancing|HTTP1.1请求时，是否启用基于请求的负载均衡策略，默认为false|true、false|否|
 |12|HTTP2PerRequestLoadBalancing|HTTP2请求时，是否启用基于请求的负载均衡策略，默认为true|true、false|否|
+|13|Fault|注入错误，用于测试场景|参考 3.1.1.3|否|
 
 ### 1.1 ResourceUsage
 |编号|配置项名称|用途描述|可选值|是否必须|
@@ -132,6 +133,7 @@ weight: 1
 |  11  |Gzip|配置静态文本文件压缩相关参数|参考 1.3|否|
 |  12  |ProxyRedirect|参考 1. 全局配置（Configs）说明||否|
 |  13  | ErrorPage |参考 1. 全局配置（Configs）说明||否|
+|  14  |Fault|注入错误，用于测试场景|参考 3.1.1.3|否|
 
 
 ###### 3.1.1.1.1 Path
