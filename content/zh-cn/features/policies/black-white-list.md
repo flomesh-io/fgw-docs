@@ -88,7 +88,7 @@ curl http://localhost:8081/headers
 
 ### 负载均衡配置
 
-我们借助在文档 [HTTP 负载均衡](app://obsidian.md/features/http-load-balancer/) 中的负载均衡器配置，修改服务的断点列表为我们的后端服务地址 `127.0.0.1:8081`；然后根据 [HTTP 插件链配置](app://obsidian.md/reference/plugin/#http-%E8%B7%AF%E7%94%B1)，将 `common/access-control.js`、`http/access-control-domain.js`、`http/access-control-route.js` 插件配置在相应的配置。
+我们借助在文档 [HTTP 负载均衡](app://obsidian.md/features/http-load-balancer/) 中的负载均衡器配置，修改服务的端点列表为我们的后端服务地址 `127.0.0.1:8081`；然后根据 [HTTP 插件链配置](app://obsidian.md/reference/plugin/#http-%E8%B7%AF%E7%94%B1)，将 `common/access-control.js`、`http/access-control-domain.js`、`http/access-control-route.js` 插件配置在相应的配置。
 
 这里我们会多加入一个监听端口 `8079`，与端口 `8080` 使用同样的负载均衡配置。当我们做端口级别的黑白名单时，方便进行进行对比验证。
 

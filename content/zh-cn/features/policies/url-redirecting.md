@@ -67,7 +67,7 @@ Hello, there
 
 ### 负载均衡器配置
 
-我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的断点列表为我们的后端服务地址 `127.0.0.1:8081` ，重定向功能实现在 `filter/request-redirect.js` 中，需要将其添加到插件链中。
+我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的端点列表为我们的后端服务地址 `127.0.0.1:8081` ，重定向功能实现在 `filter/request-redirect.js` 中，需要将其添加到插件链中。
 
 ```json
 {

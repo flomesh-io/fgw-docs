@@ -55,7 +55,7 @@ FGW 的重试功能为架构提供了额外的稳定性和韧性。通过合理�
 
 ### 负载均衡器配置
 
-我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的断点列表为我们的后端服务地址 `127.0.0.1:8082`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，重试的功能在 `http/forward.js"` 插件中实现。
+我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的端点列表为我们的后端服务地址 `127.0.0.1:8082`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，重试的功能在 `http/forward.js"` 插件中实现。
 
 ```json
 {

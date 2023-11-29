@@ -95,7 +95,7 @@ FGW 的 HTTP 头部控制功能分为 [请求头部控制 `RequestHeaderModifier
 
 ### 负载均衡配置
 
-我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的断点列表为我们的后端服务地址 `127.0.0.1:8081`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，将 `filter/header-modifier.js` 插件配置在相应的配置。
+我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的端点列表为我们的后端服务地址 `127.0.0.1:8081`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，将 `filter/header-modifier.js` 插件配置在相应的配置。
 
 ```json
 {

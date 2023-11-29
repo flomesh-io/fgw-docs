@@ -53,7 +53,7 @@ pipy -e "pipy().listen(8082).serveHTTP(new Message({status: 200},'Hi, world'))"
 
 ### 负载均衡配置
 
-我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的断点列表为我们的后端服务地址 `127.0.0.1:8081` 和 `127.0.0.1:8082`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，重试的功能在 `http/forward.js"` 插件中实现。
+我们借助在文档 [HTTP 负载均衡](/features/http-load-balancer/) 中的负载均衡器配置，修改服务的端点列表为我们的后端服务地址 `127.0.0.1:8081` 和 `127.0.0.1:8082`；然后根据 [HTTP 插件链配置](/reference/plugin/#http-路由)，重试的功能在 `http/forward.js"` 插件中实现。
 
 为了便于测试，我们将两个端点的权重分别设为 `100` 和 `10`
 
