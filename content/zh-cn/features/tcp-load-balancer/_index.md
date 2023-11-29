@@ -31,7 +31,7 @@ weight: 2
 }
 ```
 
-2. 接下来是设置端口 `8080` 的路由规则，参考文档 [TCP 协议端口号路由规则配置](/reference/configuration/#32-端口号配置protocol-为-tcp-的配置格式)。
+2. 接下来是设置端口 `8080` 的路由规则，参考文档 [TCP 协议端口号路由规则配置](/reference/configuration/#32-端口号配置protocol-为-tcpudp-的配置格式)。
 
 
 ```json
@@ -42,7 +42,7 @@ weight: 2
 }
 ```
 
-3. 配置服务端点，参考文档[服务配置](/reference/configuration/#4服务配置services)。
+3. 配置服务端点，参考文档[服务配置](/reference/configuration/#4-服务配置services)。
 
 ```json
 {

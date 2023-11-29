@@ -173,7 +173,7 @@ weight: 0
 }
 ```
 
-3. 后端服务的配置，可以参考文档 [服务配置](/reference/configuration/#4服务配置services)。
+3. 后端服务的配置，可以参考文档 [服务配置](/reference/configuration/#4-服务配置services)。
 
 ```json
 {

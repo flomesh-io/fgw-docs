@@ -88,7 +88,7 @@ FGW 的 L7 负载均衡功能可以基于网络请求的内容，如路径、头
 
 ### 配置服务端点
 
-参考文档 [服务配置](/reference/configuration/#4服务配置services)。
+参考文档 [服务配置](/reference/configuration/#4-服务配置services)。
 
 - `StickyCookieName`：使用 cookie sticky 负载均衡时的 cookie 名称。该字段用于在 sticky 负载均衡策略中标识客户端，以确保客户端请求始终被路由到同一上游服务。使用方法可参考文档 [会话保持](/features/policies/session-sticky/)。
 - `StickyCookieExpires`：使用 cookie sticky 时的 cookie 有效期。该字段定义了 cookie 的生命周期，以秒为单位。例如，如果设置为 3600，那么 cookie 的有效期为 1 小时。
